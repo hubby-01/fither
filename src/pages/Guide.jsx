@@ -1,5 +1,6 @@
 import { WEEKLY_PLAN } from '../data/workoutPlan'
 import { WEIGHT_GUIDE } from '../data/weightGuide'
+import { GuideIcon } from '../components/icons'
 
 const DAY_TYPE_COLORS = {
   'Full Body A': 'bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300',
@@ -16,7 +17,7 @@ export default function Guide() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Guide</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Guide</h1>
 
       {/* 1. Weekly Split */}
       <section data-testid="weekly-split-section">
@@ -96,26 +97,26 @@ export default function Guide() {
       </section>
 
       {/* 3. Progressive Overload Rules */}
-      <section className="bg-white dark:bg-gray-800 rounded-xl p-4" data-testid="overload-section">
+      <section className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4" data-testid="overload-section">
         <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-3">Progressive Overload Rules</h2>
         <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-100">
           <li className="flex items-start gap-2">
-            <span className="text-rose-500 mt-0.5">●</span>
+            <span className="w-2 h-2 rounded-full bg-rose-500 mt-1.5 shrink-0" />
             Complete all sets at target reps before adding weight
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-rose-500 mt-0.5">●</span>
+            <span className="w-2 h-2 rounded-full bg-rose-500 mt-1.5 shrink-0" />
             Add 2 kg for compound exercises, 1 kg for isolation
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-rose-500 mt-0.5">●</span>
+            <span className="w-2 h-2 rounded-full bg-rose-500 mt-1.5 shrink-0" />
             If you can't complete all reps, keep the weight the same
           </li>
         </ul>
       </section>
 
       {/* 4. Exercise Tips */}
-      <section className="bg-white dark:bg-gray-800 rounded-xl p-4" data-testid="exercise-tips-section">
+      <section className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4" data-testid="exercise-tips-section">
         <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-3">Exercise Tips</h2>
         <div className="space-y-3 text-sm text-gray-600 dark:text-gray-100">
           <div>
@@ -138,7 +139,7 @@ export default function Guide() {
       </section>
 
       {/* 5. Cardio Guide */}
-      <section className="bg-white dark:bg-gray-800 rounded-xl p-4" data-testid="cardio-guide-section">
+      <section className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4" data-testid="cardio-guide-section">
         <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-3">Cardio Guide</h2>
         <div className="space-y-3 text-sm text-gray-600 dark:text-gray-100">
           <div>
@@ -153,7 +154,7 @@ export default function Guide() {
       </section>
 
       {/* 6. Why This Plan Works */}
-      <section className="bg-white dark:bg-gray-800 rounded-xl p-4" data-testid="why-section">
+      <section className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4" data-testid="why-section">
         <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-3">Why This Plan Works</h2>
         <p className="text-sm text-gray-600 dark:text-gray-100 leading-relaxed">
           This plan combines strength training with cardio in a balanced 5-day split designed for fat loss and body toning. Higher rep ranges (12–20) with moderate weights build lean muscle and boost metabolism without adding bulk. Full body days ensure all major muscle groups are trained twice per week, while dedicated upper and lower days allow targeted work. Active recovery days with Zumba or yoga keep you moving without overtraining. The progressive overload approach ensures continuous improvement — as you get stronger, the weights increase gradually, keeping your body adapting and burning calories efficiently.

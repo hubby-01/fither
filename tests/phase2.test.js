@@ -137,12 +137,10 @@ describe('Storage utilities', () => {
     saveSession({ id: 's1', date: '2025-04-07' })
     saveCardio({ id: 'c1', date: '2025-04-07' })
     saveProfile({ startWeightKg: 68.9 })
-    localStorage.setItem('fither_pin', 'somehash')
     clearAllData()
     expect(getSessions()).toEqual([])
     expect(getCardio()).toEqual([])
     expect(getProfile()).toBeNull()
-    expect(localStorage.getItem('fither_pin')).toBeNull()
   })
 })
 

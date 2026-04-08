@@ -8,30 +8,30 @@ const BADGE_COLORS = {
   'Rest':             'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
 }
 
-const CARD_BORDERS = {
-  'Full Body A':      'border-rose-200 dark:border-rose-800',
-  'Full Body B':      'border-rose-200 dark:border-rose-800',
-  'Cardio + Core':    'border-orange-200 dark:border-orange-800',
-  'Upper Body':       'border-purple-200 dark:border-purple-800',
-  'Lower Body':       'border-amber-200 dark:border-amber-800',
-  'Active Recovery':  'border-teal-200 dark:border-teal-800',
-  'Rest':             'border-gray-200 dark:border-gray-700',
+const BORDER_COLORS = {
+  'Full Body A':      'border-l-rose-400',
+  'Full Body B':      'border-l-rose-400',
+  'Cardio + Core':    'border-l-orange-400',
+  'Upper Body':       'border-l-purple-400',
+  'Lower Body':       'border-l-amber-400',
+  'Active Recovery':  'border-l-teal-400',
+  'Rest':             'border-l-gray-400',
 }
 
 export default function DayPlanCard({ plan }) {
   if (!plan) return null
 
   const badgeColor = BADGE_COLORS[plan.dayType] || BADGE_COLORS['Rest']
-  const borderColor = CARD_BORDERS[plan.dayType] || CARD_BORDERS['Rest']
+  const leftBorder = BORDER_COLORS[plan.dayType] || BORDER_COLORS['Rest']
 
   // Rest day
   if (plan.type === 'rest') {
     return (
-      <div className={`rounded-xl border ${borderColor} bg-white dark:bg-gray-800 p-4`} data-testid="day-plan-card">
-        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${badgeColor}`} data-testid="day-badge">
+      <div className={`rounded-2xl border border-gray-100 dark:border-gray-800 border-l-4 ${leftBorder} bg-white dark:bg-gray-900 shadow-sm p-5`} data-testid="day-plan-card">
+        <span className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${badgeColor}`} data-testid="day-badge">
           {plan.dayType}
         </span>
-        <p className="mt-3 text-gray-500 dark:text-gray-300">{plan.restNote}</p>
+        <p className="mt-3 text-gray-500 dark:text-gray-400">{plan.restNote}</p>
       </div>
     )
   }
@@ -39,8 +39,8 @@ export default function DayPlanCard({ plan }) {
   // Active Recovery
   if (plan.type === 'active-recovery') {
     return (
-      <div className={`rounded-xl border ${borderColor} bg-white dark:bg-gray-800 p-4`} data-testid="day-plan-card">
-        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${badgeColor}`} data-testid="day-badge">
+      <div className={`rounded-2xl border border-gray-100 dark:border-gray-800 border-l-4 ${leftBorder} bg-white dark:bg-gray-900 shadow-sm p-5`} data-testid="day-plan-card">
+        <span className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${badgeColor}`} data-testid="day-badge">
           {plan.dayType}
         </span>
         <p className="mt-3 text-sm text-gray-600 dark:text-gray-300 font-medium">Pick one:</p>
@@ -57,22 +57,22 @@ export default function DayPlanCard({ plan }) {
 
   // Strength / Cardio days
   return (
-    <div className={`rounded-xl border ${borderColor} bg-white dark:bg-gray-800 p-4`} data-testid="day-plan-card">
-      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${badgeColor}`} data-testid="day-badge">
+    <div className={`rounded-2xl border border-gray-100 dark:border-gray-800 border-l-4 ${leftBorder} bg-white dark:bg-gray-900 shadow-sm p-5`} data-testid="day-plan-card">
+      <span className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${badgeColor}`} data-testid="day-badge">
         {plan.dayType}
       </span>
       <ul className="mt-3 space-y-1" data-testid="exercise-list">
         {plan.exercises.map((ex, i) => (
           <li key={i} className="flex justify-between text-sm text-gray-700 dark:text-gray-300">
             <span>{ex.name}</span>
-            <span className="text-gray-400 dark:text-gray-300">
+            <span className="text-gray-400 dark:text-gray-500">
               {ex.sets} x {ex.reps}{ex.unit ? ` ${ex.unit}` : ''}
             </span>
           </li>
         ))}
       </ul>
       {plan.cardio && (
-        <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-300">
+        <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-500 dark:text-gray-400">
           {plan.cardio.label}: {plan.cardio.durationMinutes} min
           {plan.cardio.speedKmh ? ` @ ${plan.cardio.speedKmh} km/h` : ''}
         </div>

@@ -14,6 +14,8 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm run build
+        env:
+          VITE_PIN_HASH: ${{ secrets.VITE_PIN_HASH }}
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

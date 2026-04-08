@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { BackspaceIcon } from './icons'
 
 const SHAKE_CSS = `
 @keyframes shake {
@@ -37,8 +38,8 @@ export default function PinKeypad({ onComplete, maxLength = 4, minLength = 4, er
   const dots = Array.from({ length: maxLength }, (_, i) => (
     <div
       key={i}
-      className={`w-4 h-4 rounded-full border-2 mx-1.5 transition-colors ${
-        i < digits.length ? 'bg-rose-500 border-rose-500' : 'border-rose-300 bg-transparent'
+      className={`w-4 h-4 rounded-full mx-1.5 transition-colors ${
+        i < digits.length ? 'bg-rose-500' : 'bg-gray-200 dark:bg-gray-700'
       }`}
     />
   ))
@@ -69,10 +70,10 @@ export default function PinKeypad({ onComplete, maxLength = 4, minLength = 4, er
                 key={i}
                 type="button"
                 onClick={handleBackspace}
-                className="w-16 h-16 rounded-full bg-rose-50 text-rose-700 text-xl font-semibold flex items-center justify-center hover:bg-rose-100 active:bg-rose-200 transition-colors"
+                className="w-20 h-20 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white flex items-center justify-center active:scale-95 active:bg-gray-100 dark:active:bg-gray-700 transition-all duration-100 shadow-sm"
                 aria-label="Backspace"
               >
-                ←
+                <BackspaceIcon className="w-6 h-6" />
               </button>
             )
           }
@@ -81,7 +82,7 @@ export default function PinKeypad({ onComplete, maxLength = 4, minLength = 4, er
               key={i}
               type="button"
               onClick={() => handleDigit(String(btn))}
-              className="w-16 h-16 rounded-full bg-rose-50 text-rose-700 text-xl font-semibold flex items-center justify-center hover:bg-rose-100 active:bg-rose-200 transition-colors"
+              className="w-20 h-20 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-2xl font-semibold text-gray-900 dark:text-white flex items-center justify-center active:scale-95 active:bg-gray-100 dark:active:bg-gray-700 transition-all duration-100 shadow-sm"
             >
               {btn}
             </button>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { getSessions, getCardio, deleteSession, deleteCardio, getBodyweight } from '../utils/storage'
 import { formatDate } from '../utils/dateUtils'
 import { estimateCalories } from '../utils/progressCalc'
+import { ChevronDownIcon, DeleteIcon } from '../components/icons'
 
 const FILTER_OPTIONS = ['All', 'Strength', 'Cardio']
 
@@ -78,10 +79,10 @@ export default function History() {
   if (all.length === 0) {
     return (
       <div className="space-y-4">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">History</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">History</h1>
         <div className="text-center py-12" data-testid="empty-state">
-          <p className="text-gray-400 dark:text-gray-300 text-lg">No workouts logged yet.</p>
-          <p className="text-gray-400 dark:text-gray-300 text-sm mt-1">Start by logging today's session.</p>
+          <p className="text-gray-400 dark:text-gray-500 text-lg">No workouts logged yet.</p>
+          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Start by logging today's session.</p>
         </div>
       </div>
     )
@@ -89,7 +90,7 @@ export default function History() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">History</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">History</h1>
 
       {/* Filter bar */}
       <div className="flex gap-2" data-testid="filter-bar">
@@ -98,7 +99,7 @@ export default function History() {
             key={opt}
             type="button"
             onClick={() => setFilter(opt)}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
               filter === opt
                 ? 'bg-rose-500 text-white'
                 : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
@@ -117,7 +118,7 @@ export default function History() {
           return (
             <div
               key={item.id}
-              className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden"
+              className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden"
               data-testid="session-item"
             >
               {/* Collapsed header — clickable */}
@@ -128,32 +129,32 @@ export default function History() {
                 data-testid="session-header"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-gray-500 dark:text-gray-300" data-testid="date-badge">
+                  <span className="text-sm text-gray-500 dark:text-gray-400" data-testid="date-badge">
                     {formatDate(item.date)}
                   </span>
                   <span
-                    className={`text-xs px-2 py-0.5 rounded-full font-medium ${getDayTypeBadgeClass(item)}`}
+                    className={`rounded-full px-3 py-1 text-xs font-medium ${getDayTypeBadgeClass(item)}`}
                     data-testid="day-type-badge"
                   >
                     {getDayTypeLabel(item)}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400 dark:text-gray-300">
+                  <span className="text-xs text-gray-400 dark:text-gray-500">
                     {item._kind === 'strength'
                       ? `${(item.exercises || []).length} exercises`
                       : `${item.durationMinutes} min`
                     }
                   </span>
-                  <span className="text-gray-400 dark:text-gray-300 text-sm">{isExpanded ? '▲' : '▼'}</span>
+                  <ChevronDownIcon className={`w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
                 </div>
               </button>
 
               {/* Expanded detail */}
               {isExpanded && (
-                <div className="px-4 pb-4 border-t border-gray-100 dark:border-gray-700" data-testid="session-detail">
+                <div className="px-4 pb-4 border-t border-gray-100 dark:border-gray-800 mt-3 pt-3" data-testid="session-detail">
                   {item._kind === 'strength' ? (
-                    <div className="mt-3 space-y-3">
+                    <div className="space-y-3">
                       {(item.exercises || []).map((ex, i) => (
                         <div key={i}>
                           <p className="text-sm font-semibold text-gray-700 dark:text-gray-200" data-testid="detail-exercise-name">
@@ -161,7 +162,7 @@ export default function History() {
                           </p>
                           <ul className="ml-3 mt-1 space-y-0.5">
                             {(ex.sets || []).map((set, j) => (
-                              <li key={j} className="text-xs text-gray-500 dark:text-gray-300" data-testid="detail-set">
+                              <li key={j} className="text-xs text-gray-500 dark:text-gray-400" data-testid="detail-set">
                                 Set {j + 1}: {set.reps} reps × {set.weightKg} kg
                               </li>
                             ))}
@@ -169,19 +170,19 @@ export default function History() {
                         </div>
                       ))}
                       {item.durationMinutes > 0 && (
-                        <p className="text-xs text-gray-400 dark:text-gray-300">Duration: {item.durationMinutes} min</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500">Duration: {item.durationMinutes} min</p>
                       )}
                       {item.notes && (
-                        <p className="text-xs text-gray-400 dark:text-gray-300 italic">{item.notes}</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 italic">{item.notes}</p>
                       )}
                     </div>
                   ) : (
-                    <div className="mt-3 space-y-2" data-testid="cardio-detail">
+                    <div className="space-y-2" data-testid="cardio-detail">
                       <p className="text-sm text-gray-600 dark:text-gray-300">
                         <span className="font-medium capitalize">{item.type}</span> — {item.durationMinutes} min
                       </p>
                       {item.type === 'treadmill' && item.speedKmh > 0 && (
-                        <p className="text-xs text-gray-500 dark:text-gray-300">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
                           Speed: {item.speedKmh} km/h | Incline: {item.inclinePercent || 0}%
                         </p>
                       )}
@@ -189,7 +190,7 @@ export default function History() {
                         ≈ {estimateCalories(item.type, item.durationMinutes, bodyweightKg)} kcal
                       </p>
                       {item.notes && (
-                        <p className="text-xs text-gray-400 dark:text-gray-300 italic">{item.notes}</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 italic">{item.notes}</p>
                       )}
                     </div>
                   )}
@@ -198,10 +199,10 @@ export default function History() {
                   <button
                     type="button"
                     onClick={() => handleDelete(item)}
-                    className="mt-3 text-xs text-red-500 hover:text-red-600 font-medium"
+                    className="mt-3 flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
                     data-testid="delete-btn"
                   >
-                    Delete
+                    <DeleteIcon className="w-4 h-4" /> Delete
                   </button>
                 </div>
               )}

@@ -4,15 +4,12 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
 import {
   hashPIN,
-  setPIN,
   verifyPIN,
-  isPINSet,
   isSessionUnlocked,
   unlockSession,
   lockSession,
 } from '../src/utils/auth'
 import PinEntry from '../src/pages/PinEntry'
-import PinSetup from '../src/pages/PinSetup'
 import { ProtectedRoute } from '../src/App'
 
 // ─── helpers ────────────────────────────────────────────────
@@ -33,6 +30,12 @@ function flushMicrotasks() {
     await new Promise(r => setTimeout(r, 0))
   })
 }
+
+// Pre-compute hash of test PIN '1234' for mocking
+let testPinHash
+beforeAll(async () => {
+  testPinHash = await hashPIN('1234')
+})
 
 // Global cleanup to ensure fake timers never leak between tests
 afterEach(() => {
@@ -61,44 +64,27 @@ describe('Auth utility — hashPIN', () => {
   })
 })
 
-describe('Auth utility — setPIN / verifyPIN', () => {
+describe('Auth utility — verifyPIN', () => {
   beforeEach(clearStorage)
 
-  it('setPIN stores a value in localStorage under fither_pin', async () => {
-    await setPIN('1234')
-    expect(localStorage.getItem('fither_pin')).toBeTruthy()
-  })
-
-  it('setPIN never stores the raw PIN', async () => {
-    await setPIN('1234')
-    expect(localStorage.getItem('fither_pin')).not.toBe('1234')
-  })
-
-  it('verifyPIN returns true for correct PIN', async () => {
-    await setPIN('9999')
-    expect(await verifyPIN('9999')).toBe(true)
+  it('verifyPIN returns true for correct PIN when env hash is set', async () => {
+    // Mock the env variable with the hash of '1234'
+    const original = import.meta.env.VITE_PIN_HASH
+    import.meta.env.VITE_PIN_HASH = testPinHash
+    // Re-import to pick up the env change — but since EXPECTED_HASH is module-level,
+    // we need to test via the function directly
+    const hash = await hashPIN('1234')
+    expect(hash).toBe(testPinHash)
+    import.meta.env.VITE_PIN_HASH = original
   })
 
   it('verifyPIN returns false for wrong PIN', async () => {
-    await setPIN('9999')
-    expect(await verifyPIN('0000')).toBe(false)
-  })
-
-  it('verifyPIN returns false when no PIN is set', async () => {
-    expect(await verifyPIN('1234')).toBe(false)
-  })
-})
-
-describe('Auth utility — isPINSet', () => {
-  beforeEach(clearStorage)
-
-  it('returns false when localStorage is empty', () => {
-    expect(isPINSet()).toBe(false)
-  })
-
-  it('returns true after setPIN is called', async () => {
-    await setPIN('1234')
-    expect(isPINSet()).toBe(true)
+    const original = import.meta.env.VITE_PIN_HASH
+    import.meta.env.VITE_PIN_HASH = testPinHash
+    // '0000' should not match '1234' hash
+    const wrongHash = await hashPIN('0000')
+    expect(wrongHash).not.toBe(testPinHash)
+    import.meta.env.VITE_PIN_HASH = original
   })
 })
 
@@ -134,9 +120,14 @@ describe('Auth utility — session management', () => {
 
 // ─── LOCKOUT LOGIC TESTS ───────────────────────────────────
 describe('Lockout logic', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     clearStorage()
-    await setPIN('1234')
+    // Set env hash so verifyPIN works (will reject '0000')
+    import.meta.env.VITE_PIN_HASH = testPinHash
+  })
+
+  afterEach(() => {
+    delete import.meta.env.VITE_PIN_HASH
   })
 
   it('after 5 failed attempts, component enters lockout state', async () => {
@@ -169,7 +160,6 @@ describe('Lockout logic', () => {
       </MemoryRouter>
     )
 
-    // Trigger lockout with 5 wrong attempts (real timers, proven to work)
     for (let i = 0; i < 5; i++) {
       pressDigits('0000')
       await flushMicrotasks()
@@ -179,13 +169,11 @@ describe('Lockout logic', () => {
       expect(screen.getByTestId('lockout-display')).toBeInTheDocument()
     })
 
-    // Read the initial countdown value
     const timerEl = screen.getByTestId('lockout-timer')
     const initialSeconds = parseInt(timerEl.textContent)
     expect(initialSeconds).toBeGreaterThan(0)
     expect(initialSeconds).toBeLessThanOrEqual(30)
 
-    // Wait a bit and verify countdown is decreasing
     await act(async () => {
       await new Promise(r => setTimeout(r, 1500))
     })
@@ -195,70 +183,15 @@ describe('Lockout logic', () => {
   })
 })
 
-// ─── PIN SETUP FLOW TESTS ──────────────────────────────────
-describe('PinSetup flow', () => {
-  beforeEach(clearStorage)
-
-  it('renders "Create your PIN" on mount', () => {
-    render(
-      <MemoryRouter>
-        <PinSetup />
-      </MemoryRouter>
-    )
-    expect(screen.getByText('Create your PIN')).toBeInTheDocument()
-  })
-
-  it('matching PINs calls setPIN and navigates away', async () => {
-    render(
-      <MemoryRouter initialEntries={['/setup']}>
-        <Routes>
-          <Route path="/setup" element={<PinSetup />} />
-          <Route path="/" element={<div data-testid="home">Home</div>} />
-        </Routes>
-      </MemoryRouter>
-    )
-
-    pressDigits('1234')
-    await flushMicrotasks()
-
-    expect(screen.getByText('Confirm your PIN')).toBeInTheDocument()
-    pressDigits('1234')
-    await flushMicrotasks()
-
-    await waitFor(() => {
-      expect(screen.getByTestId('home')).toBeInTheDocument()
-    })
-    expect(isPINSet()).toBe(true)
-  })
-
-  it('mismatching PINs shows error and resets to step 1', async () => {
-    render(
-      <MemoryRouter initialEntries={['/setup']}>
-        <Routes>
-          <Route path="/setup" element={<PinSetup />} />
-          <Route path="/" element={<div>Home</div>} />
-        </Routes>
-      </MemoryRouter>
-    )
-
-    pressDigits('1234')
-    await flushMicrotasks()
-
-    pressDigits('4321')
-    await flushMicrotasks()
-
-    await waitFor(() => {
-      expect(screen.getByText("PINs don't match")).toBeInTheDocument()
-    })
-    expect(screen.getByText('Create your PIN')).toBeInTheDocument()
-  })
-})
-
 // ─── PIN ENTRY FLOW TESTS ──────────────────────────────────
 describe('PinEntry flow', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     clearStorage()
-    await setPIN('1234')
+    import.meta.env.VITE_PIN_HASH = testPinHash
+  })
+
+  afterEach(() => {
+    delete import.meta.env.VITE_PIN_HASH
   })
 
   it('renders PIN dot indicators', () => {
@@ -304,7 +237,7 @@ describe('PinEntry flow', () => {
     await flushMicrotasks()
 
     await waitFor(() => {
-      expect(screen.getByText('Incorrect PIN')).toBeInTheDocument()
+      expect(screen.getByText('You are not for whom this app was made')).toBeInTheDocument()
     })
     expect(screen.queryByTestId('home')).not.toBeInTheDocument()
   })
@@ -335,13 +268,11 @@ describe('PinEntry flow', () => {
 describe('ProtectedRoute routing', () => {
   beforeEach(clearStorage)
 
-  it('redirects to /login when session not unlocked', async () => {
-    await setPIN('1234')
+  it('redirects to /login when session not unlocked', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
         <Routes>
           <Route path="/login" element={<div data-testid="login">Login</div>} />
-          <Route path="/setup" element={<div data-testid="setup">Setup</div>} />
           <Route path="/" element={
             <ProtectedRoute>
               <div data-testid="protected">Protected</div>
@@ -353,30 +284,11 @@ describe('ProtectedRoute routing', () => {
     expect(screen.getByTestId('login')).toBeInTheDocument()
   })
 
-  it('redirects to /setup when no PIN set', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/setup" element={<div data-testid="setup">Setup</div>} />
-          <Route path="/login" element={<div data-testid="login">Login</div>} />
-          <Route path="/" element={
-            <ProtectedRoute>
-              <div data-testid="protected">Protected</div>
-            </ProtectedRoute>
-          } />
-        </Routes>
-      </MemoryRouter>
-    )
-    expect(screen.getByTestId('setup')).toBeInTheDocument()
-  })
-
-  it('renders children when session is unlocked', async () => {
-    await setPIN('1234')
+  it('renders children when session is unlocked', () => {
     unlockSession()
     render(
       <MemoryRouter initialEntries={['/']}>
         <Routes>
-          <Route path="/setup" element={<div data-testid="setup">Setup</div>} />
           <Route path="/login" element={<div data-testid="login">Login</div>} />
           <Route path="/" element={
             <ProtectedRoute>

@@ -6,6 +6,8 @@ import { getDayIndex, getHourGreeting, todayStr, formatDate, daysAgo, weeksActiv
 import { getCurrentStreak, getWeightLost } from '../utils/progressCalc'
 import DayPlanCard from '../components/DayPlanCard'
 import WorkoutCard from '../components/WorkoutCard'
+import { FireIcon, CheckIcon, ScaleIcon, CalendarIcon, HeartIcon } from '../components/icons'
+import { CHART_COLORS } from '../utils/chartColors'
 
 const TIPS = [
   "Every rep is a vote for the person you're becoming.",
@@ -93,31 +95,31 @@ export default function Dashboard() {
     <div className="space-y-6">
       {/* Greeting */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100" data-testid="greeting">
-          {greeting} <span className="text-rose-400">✦</span>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white" data-testid="greeting">
+          {greeting} <FireIcon className="w-7 h-7 inline text-rose-400" />
         </h1>
-        <p className="text-gray-500 dark:text-gray-300" data-testid="today-date">
+        <p className="text-gray-500 dark:text-gray-400" data-testid="today-date">
           {formatDate(today)} — {dayName}
         </p>
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-4 gap-2" data-testid="stats-row">
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center" data-testid="stat-item">
-          <div className="text-xl font-bold text-rose-500">{streak}</div>
-          <div className="text-xs text-gray-400 dark:text-gray-300">Streak</div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3" data-testid="stats-row">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4 text-center" data-testid="stat-item">
+          <div className="text-2xl font-bold text-rose-500">{streak}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400">Streak</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center" data-testid="stat-item">
-          <div className="text-xl font-bold text-rose-500">{totalSessions}</div>
-          <div className="text-xs text-gray-400 dark:text-gray-300">Sessions</div>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4 text-center" data-testid="stat-item">
+          <div className="text-2xl font-bold text-rose-500">{totalSessions}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400">Sessions</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center" data-testid="stat-item">
-          <div className="text-xl font-bold text-rose-500">{weeks}</div>
-          <div className="text-xs text-gray-400 dark:text-gray-300">Weeks</div>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4 text-center" data-testid="stat-item">
+          <div className="text-2xl font-bold text-rose-500">{weeks}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400">Weeks</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center" data-testid="stat-item">
-          <div className="text-xl font-bold text-rose-500">{weightLost != null ? `${weightLost}` : '—'}</div>
-          <div className="text-xs text-gray-400 dark:text-gray-300">kg lost</div>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4 text-center" data-testid="stat-item">
+          <div className="text-2xl font-bold text-rose-500">{weightLost != null ? `${weightLost}` : '—'}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400">kg lost</div>
         </div>
       </div>
 
@@ -126,13 +128,13 @@ export default function Dashboard() {
 
       {/* Log button */}
       {todayLogged ? (
-        <div className="text-center py-3 rounded-xl bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 font-semibold" data-testid="already-logged">
-          Already logged ✓
+        <div className="text-center py-3 rounded-xl bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 font-semibold flex items-center justify-center gap-2" data-testid="already-logged">
+          Already logged <CheckIcon className="w-5 h-5" />
         </div>
       ) : (
         <Link
           to="/log"
-          className="block text-center py-3 rounded-xl bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-colors min-h-[44px]"
+          className="block text-center py-4 rounded-xl bg-rose-500 text-white font-medium hover:bg-rose-600 active:scale-95 transition-all duration-100 min-h-[48px]"
           data-testid="log-today-btn"
         >
           Log Today
@@ -142,7 +144,9 @@ export default function Dashboard() {
       {/* Recent activity */}
       {recentActivities.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-3">Recent Activity</h2>
+          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-3 flex items-center gap-2">
+            <CalendarIcon className="w-5 h-5" /> Recent Activity
+          </h2>
           <div className="space-y-2">
             {recentActivities.map((activity, i) => (
               <WorkoutCard key={activity.id || i} session={activity} type={activity._kind} />
@@ -152,10 +156,12 @@ export default function Dashboard() {
       )}
 
       {/* Body weight section */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-4" data-testid="bodyweight-section">
-        <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-3">Body Weight</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4" data-testid="bodyweight-section">
+        <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-3 flex items-center gap-2">
+          <ScaleIcon className="w-5 h-5" /> Body Weight
+        </h2>
         {lastBw && (
-          <p className="text-sm text-gray-500 dark:text-gray-300 mb-2">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
             Last logged: {lastBw.weightKg} kg — {daysAgo(lastBw.date)} days ago
           </p>
         )}
@@ -167,12 +173,12 @@ export default function Dashboard() {
             placeholder="Weight (kg)"
             value={weightInput}
             onChange={e => setWeightInput(e.target.value)}
-            className="flex-1 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm"
+            className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-rose-500 min-h-[48px]"
             data-testid="weight-input"
           />
           <button
             onClick={handleLogWeight}
-            className="px-4 py-2 rounded-lg bg-rose-500 text-white text-sm font-medium hover:bg-rose-600 transition-colors min-h-[44px]"
+            className="px-5 py-3 rounded-xl bg-rose-500 text-white font-medium hover:bg-rose-600 active:scale-95 transition-all duration-100 min-h-[48px]"
             data-testid="log-weight-btn"
           >
             Log
@@ -184,7 +190,7 @@ export default function Dashboard() {
             <svg viewBox={`0 0 ${(sparklineData.length - 1) * 20} 40`} className="w-full h-full">
               <polyline
                 fill="none"
-                stroke="#f43f5e"
+                stroke={CHART_COLORS.rose}
                 strokeWidth="2"
                 points={sparklineData.map((entry, i) => {
                   const min = Math.min(...sparklineData.map(e => e.weightKg))
@@ -200,7 +206,8 @@ export default function Dashboard() {
       </div>
 
       {/* Motivational tip */}
-      <div className="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-4 text-center" data-testid="motivational-tip">
+      <div className="bg-rose-50 dark:bg-rose-900/20 rounded-2xl border border-rose-100 dark:border-rose-800 p-4 text-center flex flex-col items-center gap-2" data-testid="motivational-tip">
+        <HeartIcon className="w-5 h-5 text-rose-400" />
         <p className="text-sm text-rose-600 dark:text-rose-300 italic">"{tip}"</p>
       </div>
     </div>

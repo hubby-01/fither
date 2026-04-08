@@ -8,20 +8,12 @@ export async function hashPIN(pin) {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 }
 
-export async function setPIN(pin) {
-  const hash = await hashPIN(pin)
-  localStorage.setItem('fither_pin', hash)
-}
-
 export async function verifyPIN(pin) {
-  const stored = localStorage.getItem('fither_pin')
-  if (!stored) return false
+  // Read at call time so tests can set the env var after import
+  const expectedHash = import.meta.env.VITE_PIN_HASH
+  if (!expectedHash) return false
   const hash = await hashPIN(pin)
-  return hash === stored
-}
-
-export function isPINSet() {
-  return !!localStorage.getItem('fither_pin')
+  return hash === expectedHash
 }
 
 export function isSessionUnlocked() {

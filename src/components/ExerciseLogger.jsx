@@ -1,5 +1,6 @@
 import SetRow from './SetRow'
 import { WEIGHT_GUIDE } from '../data/weightGuide'
+import { AddIcon } from './icons'
 
 export default function ExerciseLogger({ name, targetReps, sets, onChange, overloadSuggestion }) {
   const guide = WEIGHT_GUIDE[name]
@@ -21,7 +22,7 @@ export default function ExerciseLogger({ name, targetReps, sets, onChange, overl
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-3" data-testid="exercise-logger">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4 mb-3" data-testid="exercise-logger">
       <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-1" data-testid="exercise-name">
         {name}
       </h3>
@@ -29,11 +30,11 @@ export default function ExerciseLogger({ name, targetReps, sets, onChange, overl
       {/* Overload hint */}
       {overloadSuggestion && overloadSuggestion.suggestion === 'increase' && (
         <p className="text-xs text-green-600 dark:text-green-400 mb-2" data-testid="overload-hint-increase">
-          ↑ Try {overloadSuggestion.suggestedWeightKg} kg — you hit all reps last time!
+          Try {overloadSuggestion.suggestedWeightKg} kg — you hit all reps last time!
         </p>
       )}
       {overloadSuggestion && overloadSuggestion.suggestion === 'maintain' && (
-        <p className="text-xs text-gray-400 dark:text-gray-300 mb-2" data-testid="overload-hint-maintain">
+        <p className="text-xs text-gray-400 dark:text-gray-500 mb-2" data-testid="overload-hint-maintain">
           Keep at {overloadSuggestion.lastWeightKg} kg — work on completing all reps
         </p>
       )}
@@ -64,10 +65,10 @@ export default function ExerciseLogger({ name, targetReps, sets, onChange, overl
       <button
         type="button"
         onClick={handleAddSet}
-        className="mt-2 text-xs text-rose-500 hover:text-rose-600 font-medium"
+        className="mt-2 flex items-center gap-1 text-xs text-rose-500 hover:text-rose-600 font-medium"
         data-testid="add-set-btn"
       >
-        + Add Set
+        <AddIcon className="w-3 h-3" /> Add Set
       </button>
     </div>
   )

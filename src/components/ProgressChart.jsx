@@ -1,6 +1,7 @@
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
+import { CHART_COLORS } from '../utils/chartColors'
 
-export default function ProgressChart({ data, label, unit, color = '#f43f5e' }) {
+export default function ProgressChart({ data, label, unit, color = CHART_COLORS.rose }) {
   if (!data || data.length < 2) {
     return (
       <div className="text-center py-8 text-gray-400 dark:text-gray-300 text-sm" data-testid="chart-empty">
@@ -13,17 +14,17 @@ export default function ProgressChart({ data, label, unit, color = '#f43f5e' }) 
     <div data-testid="progress-chart">
       <ResponsiveContainer width="100%" height={220}>
         <LineChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.gridLine} />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 11, fill: '#9ca3af' }}
+            tick={{ fontSize: 11, fill: CHART_COLORS.tickText }}
             tickFormatter={d => {
               const date = new Date(d + 'T00:00:00')
               return `${date.getDate()}/${date.getMonth() + 1}`
             }}
           />
           <YAxis
-            tick={{ fontSize: 11, fill: '#9ca3af' }}
+            tick={{ fontSize: 11, fill: CHART_COLORS.tickText }}
             domain={['auto', 'auto']}
             unit={unit ? ` ${unit}` : ''}
           />

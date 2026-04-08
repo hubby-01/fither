@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PinKeypad from '../components/PinKeypad'
 import { verifyPIN, unlockSession } from '../utils/auth'
+import { LockIcon } from '../components/icons'
 
 export default function PinEntry() {
   const navigate = useNavigate()
@@ -42,15 +43,18 @@ export default function PinEntry() {
         setLockoutSeconds(30)
         setErrorMsg('Too many attempts. Try again in 30s')
       } else {
-        setErrorMsg('Incorrect PIN')
+        setErrorMsg('You are not for whom this app was made')
       }
     }
   }
 
   return (
-    <div className="min-h-screen bg-rose-500 flex flex-col items-center justify-center px-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-rose-700 text-center mb-2">
+    <div className="min-h-screen bg-gradient-to-b from-rose-500 to-rose-600 flex flex-col items-center justify-center px-4">
+      <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl p-8 w-full max-w-sm">
+        <div className="flex justify-center mb-4">
+          <LockIcon className="w-10 h-10 text-rose-500" />
+        </div>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-2">
           Enter your PIN
         </h1>
         {errorMsg && (
@@ -60,8 +64,8 @@ export default function PinEntry() {
         )}
         {isLockedOut ? (
           <div className="text-center" data-testid="lockout-display">
-            <p className="text-gray-500 text-lg mb-2">Too many attempts</p>
-            <p className="text-rose-600 text-3xl font-bold" data-testid="lockout-timer">
+            <p className="text-gray-500 dark:text-gray-400 text-lg mb-2">Too many attempts</p>
+            <p className="text-rose-600 dark:text-rose-400 text-3xl font-bold" data-testid="lockout-timer">
               {lockoutSeconds}s
             </p>
           </div>

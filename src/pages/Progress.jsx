@@ -4,6 +4,8 @@ import { getPersonalRecords, getWeightLost, estimateCalories } from '../utils/pr
 import { formatDate } from '../utils/dateUtils'
 import ProgressChart from '../components/ProgressChart'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
+import { CHART_COLORS } from '../utils/chartColors'
+import { TrophyIcon, ChartIcon, ScaleIcon } from '../components/icons'
 
 const DEFAULT_START_WEIGHT = 68.9
 
@@ -86,26 +88,28 @@ export default function Progress() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Progress</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Progress</h1>
 
       {/* 1. Fat Loss Summary */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-4" data-testid="fat-loss-card">
-        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-300 mb-3">Fat Loss Summary</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4" data-testid="fat-loss-card">
+        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
+          <ScaleIcon className="w-4 h-4" /> Fat Loss Summary
+        </h2>
         <div className="grid grid-cols-3 gap-3 text-center">
           <div>
-            <p className="text-xs text-gray-400 dark:text-gray-300">Start</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">Start</p>
             <p className="text-lg font-bold text-gray-700 dark:text-gray-200" data-testid="start-weight">
               {startWeight} kg
             </p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 dark:text-gray-300">Current</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">Current</p>
             <p className="text-lg font-bold text-gray-700 dark:text-gray-200" data-testid="current-weight">
               {currentWeight} kg
             </p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 dark:text-gray-300">Lost</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">Lost</p>
             <p className="text-lg font-bold text-rose-500" data-testid="weight-lost">
               {weightLost !== null ? weightLost : 0} kg
             </p>
@@ -113,7 +117,7 @@ export default function Progress() {
         </div>
         {goalWeight && (
           <div className="mt-3">
-            <div className="flex justify-between text-xs text-gray-400 dark:text-gray-300 mb-1">
+            <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500 mb-1">
               <span>{startWeight} kg</span>
               <span>Goal: {goalWeight} kg</span>
             </div>
@@ -129,14 +133,16 @@ export default function Progress() {
       </div>
 
       {/* 2. Strength Progress */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-4" data-testid="strength-section">
-        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-300 mb-3">Strength Progress</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4" data-testid="strength-section">
+        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
+          <ChartIcon className="w-4 h-4" /> Strength Progress
+        </h2>
         {allExercises.length > 0 ? (
           <>
             <select
               value={selectedExercise}
               onChange={e => setSelectedExercise(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm mb-3"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-100 text-base mb-3 focus:outline-none focus:ring-2 focus:ring-rose-500 min-h-[48px]"
               data-testid="exercise-dropdown"
             >
               {allExercises.map(name => (
@@ -150,15 +156,17 @@ export default function Progress() {
             />
           </>
         ) : (
-          <p className="text-sm text-gray-400 dark:text-gray-300 text-center py-4" data-testid="strength-empty">
+          <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-4" data-testid="strength-empty">
             Log the same exercise in 2+ sessions to see strength progress.
           </p>
         )}
       </div>
 
       {/* 3. Body Weight */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-4" data-testid="bodyweight-section">
-        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-300 mb-3">Body Weight</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4" data-testid="bodyweight-section">
+        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
+          <ScaleIcon className="w-4 h-4" /> Body Weight
+        </h2>
         <ProgressChart
           data={bodyweightData}
           label="Weight"
@@ -167,60 +175,64 @@ export default function Progress() {
       </div>
 
       {/* 4. Cardio Progress */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-4" data-testid="cardio-section">
-        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-300 mb-3">Cardio Progress</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4" data-testid="cardio-section">
+        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
+          <ChartIcon className="w-4 h-4" /> Cardio Progress
+        </h2>
 
         {treadmillSpeedData.length >= 2 && (
           <div className="mb-4">
-            <h3 className="text-xs text-gray-400 dark:text-gray-300 mb-2">Treadmill Speed</h3>
+            <h3 className="text-xs text-gray-400 dark:text-gray-500 mb-2">Treadmill Speed</h3>
             <ProgressChart
               data={treadmillSpeedData}
               label="Speed"
               unit="km/h"
-              color="#f97316"
+              color={CHART_COLORS.orange}
             />
           </div>
         )}
 
         {weeklyCardio.length > 0 ? (
           <div data-testid="weekly-cardio-chart">
-            <h3 className="text-xs text-gray-400 dark:text-gray-300 mb-2">Weekly Cardio Minutes</h3>
+            <h3 className="text-xs text-gray-400 dark:text-gray-500 mb-2">Weekly Cardio Minutes</h3>
             <ResponsiveContainer width="100%" height={180}>
               <BarChart data={weeklyCardio} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="week" tick={{ fontSize: 11, fill: '#9ca3af' }} />
-                <YAxis tick={{ fontSize: 11, fill: '#9ca3af' }} unit=" min" />
+                <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.gridLine} />
+                <XAxis dataKey="week" tick={{ fontSize: 11, fill: CHART_COLORS.tickText }} />
+                <YAxis tick={{ fontSize: 11, fill: CHART_COLORS.tickText }} unit=" min" />
                 <Tooltip formatter={(value) => [`${value} min`, 'Cardio']} />
-                <Bar dataKey="minutes" fill="#f97316" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="minutes" fill={CHART_COLORS.orange} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         ) : (
-          <p className="text-sm text-gray-400 dark:text-gray-300 text-center py-4" data-testid="cardio-empty">
+          <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-4" data-testid="cardio-empty">
             Log cardio sessions to see progress here.
           </p>
         )}
       </div>
 
       {/* 5. Personal Records */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-4" data-testid="pr-section">
-        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-300 mb-3">Personal Records</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-4" data-testid="pr-section">
+        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
+          <TrophyIcon className="w-4 h-4" /> Personal Records
+        </h2>
         {prEntries.length > 0 ? (
           <div className="grid grid-cols-2 gap-2">
             {prEntries.map(([name, pr]) => (
               <div
                 key={name}
-                className="bg-rose-50 dark:bg-rose-900/20 rounded-lg p-3 text-center"
+                className="bg-rose-50 dark:bg-rose-900/20 rounded-2xl p-3 text-center"
                 data-testid="pr-badge"
               >
-                <p className="text-xs text-gray-500 dark:text-gray-300 truncate">{name}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{name}</p>
                 <p className="text-lg font-bold text-rose-500">{pr.weightKg} kg</p>
-                <p className="text-xs text-gray-400 dark:text-gray-300">{formatDate(pr.date)}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">{formatDate(pr.date)}</p>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-gray-400 dark:text-gray-300 text-center py-4" data-testid="pr-empty">
+          <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-4" data-testid="pr-empty">
             Your personal records will appear here after logging workouts.
           </p>
         )}

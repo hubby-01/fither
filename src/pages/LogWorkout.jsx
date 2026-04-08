@@ -6,6 +6,7 @@ import { getDayIndex, todayStr } from '../utils/dateUtils'
 import { getOverloadSuggestion } from '../utils/progressCalc'
 import ExerciseLogger from '../components/ExerciseLogger'
 import CardioLogger from '../components/CardioLogger'
+import { AddIcon, SaveIcon, TimerIcon } from '../components/icons'
 
 export default function LogWorkout() {
   const navigate = useNavigate()
@@ -112,14 +113,14 @@ export default function LogWorkout() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Log Workout</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Log Workout</h1>
 
       {/* Tabs */}
       <div className="flex gap-2" data-testid="workout-tabs">
         <button
           type="button"
           onClick={() => { setActiveTab('strength'); setValidationError('') }}
-          className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-colors ${
+          className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
             activeTab === 'strength'
               ? 'bg-rose-500 text-white'
               : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300'
@@ -131,7 +132,7 @@ export default function LogWorkout() {
         <button
           type="button"
           onClick={() => { setActiveTab('cardio'); setValidationError('') }}
-          className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-colors ${
+          className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
             activeTab === 'cardio'
               ? 'bg-rose-500 text-white'
               : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300'
@@ -164,31 +165,33 @@ export default function LogWorkout() {
           <button
             type="button"
             onClick={handleAddExercise}
-            className="w-full py-2 rounded-lg border-2 border-dashed border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-300 text-sm hover:border-rose-300 hover:text-rose-400 transition-colors"
+            className="w-full py-2 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-sm flex items-center justify-center gap-1.5 hover:border-rose-300 hover:text-rose-400 transition-colors"
             data-testid="add-exercise-btn"
           >
-            + Add Exercise
+            <AddIcon className="w-4 h-4" /> Add Exercise
           </button>
 
           <div className="mt-4 space-y-3">
             <div>
-              <label className="text-sm text-gray-500 dark:text-gray-300">Duration (min)</label>
+              <label className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+                <TimerIcon className="w-4 h-4" /> Duration (min)
+              </label>
               <input
                 type="number"
                 inputMode="numeric"
                 value={duration}
                 onChange={e => setDuration(e.target.value)}
-                className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm"
+                className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-rose-500 min-h-[48px]"
                 data-testid="session-duration"
               />
             </div>
             <div>
-              <label className="text-sm text-gray-500 dark:text-gray-300">Notes</label>
+              <label className="text-sm text-gray-500 dark:text-gray-400">Notes</label>
               <textarea
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
                 rows={2}
-                className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm"
+                className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-rose-500"
                 data-testid="session-notes"
               />
             </div>
@@ -197,10 +200,10 @@ export default function LogWorkout() {
           <button
             type="button"
             onClick={handleSaveStrength}
-            className="w-full mt-4 py-3 rounded-xl bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-colors min-h-[44px]"
+            className="w-full mt-4 py-3 rounded-xl bg-rose-500 text-white font-medium hover:bg-rose-600 active:scale-95 transition-all duration-100 min-h-[48px] flex items-center justify-center gap-2"
             data-testid="save-strength-btn"
           >
-            Save Workout
+            <SaveIcon className="w-5 h-5" /> Save Workout
           </button>
         </div>
       )}
@@ -215,12 +218,12 @@ export default function LogWorkout() {
           />
 
           <div className="mt-4">
-            <label className="text-sm text-gray-500 dark:text-gray-300">Notes</label>
+            <label className="text-sm text-gray-500 dark:text-gray-400">Notes</label>
             <textarea
               value={cardioNotes}
               onChange={e => setCardioNotes(e.target.value)}
               rows={2}
-              className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-rose-500"
               data-testid="cardio-notes"
             />
           </div>
@@ -228,10 +231,10 @@ export default function LogWorkout() {
           <button
             type="button"
             onClick={handleSaveCardio}
-            className="w-full mt-4 py-3 rounded-xl bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-colors min-h-[44px]"
+            className="w-full mt-4 py-3 rounded-xl bg-rose-500 text-white font-medium hover:bg-rose-600 active:scale-95 transition-all duration-100 min-h-[48px] flex items-center justify-center gap-2"
             data-testid="save-cardio-btn"
           >
-            Save Cardio
+            <SaveIcon className="w-5 h-5" /> Save Cardio
           </button>
         </div>
       )}

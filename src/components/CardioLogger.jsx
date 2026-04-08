@@ -22,7 +22,7 @@ export default function CardioLogger({ value, onChange, bodyweightKg }) {
             key={t}
             type="button"
             onClick={() => update({ type: t })}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium capitalize transition-colors ${
+            className={`rounded-full px-3 py-1 text-xs font-medium capitalize transition-colors ${
               value.type === t
                 ? 'bg-rose-500 text-white'
                 : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
@@ -36,13 +36,13 @@ export default function CardioLogger({ value, onChange, bodyweightKg }) {
 
       {/* Duration — always shown */}
       <div>
-        <label className="text-sm text-gray-500 dark:text-gray-300">Duration (min)</label>
+        <label className="text-sm text-gray-500 dark:text-gray-400">Duration (min)</label>
         <input
           type="number"
           inputMode="numeric"
           value={value.durationMinutes || ''}
           onChange={e => update({ durationMinutes: parseInt(e.target.value) || 0 })}
-          className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm"
+          className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-rose-500 min-h-[48px]"
           data-testid="duration-input"
         />
       </div>
@@ -51,25 +51,25 @@ export default function CardioLogger({ value, onChange, bodyweightKg }) {
       {value.type === 'treadmill' && (
         <>
           <div>
-            <label className="text-sm text-gray-500 dark:text-gray-300">Speed (km/h)</label>
+            <label className="text-sm text-gray-500 dark:text-gray-400">Speed (km/h)</label>
             <input
               type="number"
               inputMode="decimal"
               step="0.1"
               value={value.speedKmh || ''}
               onChange={e => update({ speedKmh: parseFloat(e.target.value) || 0 })}
-              className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-rose-500 min-h-[48px]"
               data-testid="speed-input"
             />
           </div>
           <div>
-            <label className="text-sm text-gray-500 dark:text-gray-300">Incline (%)</label>
+            <label className="text-sm text-gray-500 dark:text-gray-400">Incline (%)</label>
             <input
               type="number"
               inputMode="numeric"
               value={value.inclinePercent || ''}
               onChange={e => update({ inclinePercent: parseInt(e.target.value) || 0 })}
-              className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-rose-500 min-h-[48px]"
               data-testid="incline-input"
             />
           </div>
@@ -79,12 +79,12 @@ export default function CardioLogger({ value, onChange, bodyweightKg }) {
       {/* Other — activity name */}
       {value.type === 'other' && (
         <div>
-          <label className="text-sm text-gray-500 dark:text-gray-300">Activity name</label>
+          <label className="text-sm text-gray-500 dark:text-gray-400">Activity name</label>
           <input
             type="text"
             value={value.activityName || ''}
             onChange={e => update({ activityName: e.target.value })}
-            className="mt-1 w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm"
+            className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-rose-500 min-h-[48px]"
             data-testid="activity-name-input"
           />
         </div>
@@ -92,9 +92,9 @@ export default function CardioLogger({ value, onChange, bodyweightKg }) {
 
       {/* Calorie estimate */}
       {calories > 0 && (
-        <div className="bg-rose-50 dark:bg-rose-900/20 rounded-lg p-3 text-center" data-testid="calorie-estimate">
+        <div className="bg-rose-50 dark:bg-rose-900/20 rounded-2xl p-3 text-center" data-testid="calorie-estimate">
           <span className="text-lg font-bold text-rose-500">≈ {calories} kcal</span>
-          <p className="text-xs text-gray-400 dark:text-gray-300 mt-1">Estimate only</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Estimate only</p>
         </div>
       )}
     </div>

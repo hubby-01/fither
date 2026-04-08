@@ -57,5 +57,4 @@ export function exportAllData() {
 
 export function clearAllData() {
   Object.values(KEYS).forEach(k => localStorage.removeItem(k))
-  localStorage.removeItem('fither_pin')
 }
